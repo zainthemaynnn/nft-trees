@@ -7,7 +7,7 @@ import Typography from '@material-ui/core/Typography';
 
 import { makeStyles } from '@material-ui/core/styles';
 
-import { images } from '../images';
+import treeimg from '../assets/tree.jpg';
 
 const useStyles = makeStyles((theme) => {
   return {
@@ -26,16 +26,16 @@ const useStyles = makeStyles((theme) => {
   };
 });
 
-const BaseballCard = ({ playerName, handleClick }) => {
+const BaseballCard = ({ tree }) => {
   const classes = useStyles();
 
   return (
     <Card className={classes.baseballCard}>
-      <CardActionArea onClick={() => handleClick(playerName)}>
+      <CardActionArea>
         <CardMedia
           className={classes.media}
-          image={images[playerName]}
-          title={playerName}
+          image={treeimg}
+          title={tree.name}
         />
         <CardContent>
           <Typography
@@ -44,7 +44,7 @@ const BaseballCard = ({ playerName, handleClick }) => {
             component="h2"
             className={classes.cardText}
           >
-            {playerName}
+            #{tree.serial} {tree.name}: 1 of 1 {tree.genus} trees
           </Typography>
         </CardContent>
       </CardActionArea>

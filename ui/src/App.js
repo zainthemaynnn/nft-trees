@@ -12,12 +12,11 @@ import {
 import './App.css';
 
 import Header from './components/Header.jsx';
-import CardDisplay from './components/CardDisplay.jsx';
 import ApproveOfferSnackbar from './components/ApproveOfferSnackbar.jsx';
 import BoughtCardSnackbar from './components/BoughtCardSnackbar.jsx';
 import EnableAppDialog from './components/EnableAppDialog.jsx';
 
-import { makeOfferForCards } from './makeOfferForCards.js';
+import { makeOffer } from './makeOffer.js';
 
 import dappConstants from './lib/constants.js';
 
@@ -26,7 +25,7 @@ const {
   INSTALLATION_BOARD_ID,
   issuerBoardIds: { Card: CARD_ISSUER_BOARD_ID },
   brandBoardIds: { Money: MONEY_BRAND_BOARD_ID, Card: CARD_BRAND_BOARD_ID },
-  pricePerCard,
+  PRICE_PER_NFT,
 } = dappConstants;
 
 function App() {
@@ -40,7 +39,6 @@ function App() {
 
   const [walletConnected, setWalletConnected] = useState(false);
   const [dappApproved, setDappApproved] = useState(true);
-  const [availableCards, setAvailableCards] = useState([]);
   const [cardPurse, setCardPurse] = useState(null);
   const [tokenPurse, setTokenPurse] = useState(null);
   const [openEnableAppDialog, setOpenEnableAppDialog] = useState(false);
@@ -75,7 +73,7 @@ function App() {
         dispatch: ctpDispatch,
         getBootstrap,
       } = makeCapTP(
-        'Card Store',
+        'NFTree Market',
         (obj) => socket.send(JSON.stringify(obj)),
         otherSide,
       );
@@ -121,12 +119,6 @@ function App() {
       const availableItemsNotifier = E(
         publicFacetRef.current,
       ).getAvailableItemsNotifier();
-
-      for await (const cardsAvailableAmount of iterateNotifier(
-        availableItemsNotifier,
-      )) {
-        setAvailableCards(cardsAvailableAmount.value);
-      }
     };
 
     const onDisconnect = () => {
@@ -147,14 +139,13 @@ function App() {
     return deactivateWebSocket;
   }, []);
 
-  const handleClick = (name) => {
-    makeOfferForCards({
+  const handleClick = () => {
+    makeOffer({
       walletP: walletPRef.current,
       publicFacet: publicFacetRef.current,
-      cards: harden([name]),
       cardPurse,
       tokenPurse,
-      pricePerCard: BigInt(pricePerCard),
+      pricePerCard: BigInt(PRICE_PER_NFT),
     });
     setNeedToApproveOffer(true);
   };
@@ -167,7 +158,7 @@ function App() {
   return (
     <div className="App">
       <Header walletConnected={walletConnected} dappApproved={dappApproved} />
-      <CardDisplay playerNames={availableCards} handleClick={handleClick} />
+      <button onClick={() => handleClick()}>Mint</button>
       <EnableAppDialog
         open={openEnableAppDialog}
         handleClose={handleDialogClose}

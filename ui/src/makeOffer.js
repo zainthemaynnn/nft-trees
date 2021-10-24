@@ -1,21 +1,14 @@
 import { E } from '@agoric/eventual-send';
-import { assert, details } from '@agoric/assert';
 
-export const makeOfferForCards = async ({
+export const makeOffer = async ({
   walletP,
   publicFacet,
-  cards,
   cardPurse,
   tokenPurse,
   pricePerCard,
 }) => {
-  assert(
-    cards && cards.length > 0,
-    details`At least one card must be chosen to purchase`,
-  );
   const invitation = E(publicFacet).makeBuyerInvitation();
-
-  const cost = BigInt(cards.length) * pricePerCard;
+  const cost = pricePerCard;
 
   const offerConfig = {
     // JSONable ID for this offer.  This is scoped to the origin.
@@ -23,9 +16,9 @@ export const makeOfferForCards = async ({
     invitation,
     proposalTemplate: {
       want: {
-        Items: {
+        NFTs: {
           pursePetname: cardPurse.pursePetname,
-          value: cards,
+          value: E(publicFacet).getSerial(),
         },
       },
       give: {

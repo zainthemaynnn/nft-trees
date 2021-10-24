@@ -19,15 +19,14 @@ const useStyles = makeStyles((theme) => {
   };
 });
 
-const CardDisplay = ({ playerNames, handleClick }) => {
+const CardDisplay = ({ trees }) => {
   const classes = useStyles();
 
-  const cards = playerNames.map((playerName) => (
-    <Grid item sm={5} md={3} key={playerName}>
+  const cards = trees.map((tree) => (
+    <Grid item sm={5} md={3} key={tree.name}>
       <BaseballCard
-        playerName={playerName}
-        key={playerName}
-        handleClick={handleClick}
+        tree={tree}
+        key={tree.name}
       />
     </Grid>
   ));
