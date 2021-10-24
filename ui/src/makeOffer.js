@@ -1,4 +1,6 @@
 import { E } from '@agoric/eventual-send';
+import { AmountMath } from '@agoric/ertp';
+import { trees } from "../../api/NFT-gen/trees.js";
 
 export const makeOffer = async ({
   walletP,
@@ -9,6 +11,7 @@ export const makeOffer = async ({
 }) => {
   const invitation = E(publicFacet).makeBuyerInvitation();
   const cost = pricePerCard;
+  const serial = E(publicFacet).getSerial();
 
   const offerConfig = {
     // JSONable ID for this offer.  This is scoped to the origin.
@@ -29,6 +32,9 @@ export const makeOffer = async ({
       },
     },
   };
+
+  var tree = trees[serial.value];
+  alert(`Purchased #${tree.serial}: ${tree.name}, ${tree.location} 1 of ${tree.exclusitivity} ${tree.genus} trees`);
 
   return E(walletP).addOffer(offerConfig);
 };

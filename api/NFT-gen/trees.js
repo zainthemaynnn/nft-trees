@@ -1,4 +1,4 @@
-export const NFT_COUNT = 100;
+export const NFT_COUNT = 7433;
 
 export const trees = (() => {
   import countries from "./countries.js";

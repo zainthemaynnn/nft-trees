@@ -14,11 +14,12 @@ const start = async (zcf) => {
   const mint = await zcf.makeZCFMint(nftName, AssetKind.SET);
   const { brand: brand } = mint.getIssuerRecord();
 
-  var serial = 1n;
+  var serial = AmountMath.make(brand, [0n]);
+  const one = AmountMath.make(brand, [1n]);
   const { zcfSeat: sellerSeat } = zcf.makeEmptySeatKit();
 
   const buyNFTs = (buyerSeat) => {
-    const amount = AmountMath.make(brand, [serial]);
+    const amount = AmountMath.add(serial, one);
     mint.mintGains({ NFTs: amount }, buyerSeat);
     serial += 1n;
 
